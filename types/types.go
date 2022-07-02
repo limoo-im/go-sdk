@@ -20,3 +20,9 @@ type LoginResult struct {
 	// LastAvatarUpdateTime string   `json:"last_avatar_update_time"`
 	Roles []string `json:"roles"`
 }
+
+type SendMessageOptions struct {
+	WorkspaceID    string `json:"-"`
+	ConversationID string `json:"-"`
+	Text           string `json:"text"`
+}

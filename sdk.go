@@ -1,6 +1,8 @@
 package sdk
 
 import (
+	"bytes"
+	"crypto/tls"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -16,10 +18,12 @@ type LimooClient struct {
 	Password   string
 	BaseURL    string
 	httpClient *http.Client
+	lastToken  *string
 }
 
 // login to limoo and return the client
-func (c *LimooClient) New(limooBaseURL, username, password string) error {
+// TODO: use refresh token
+func (c *LimooClient) New(limooBaseURL, username, password string, insecureSkipVerify bool) error {
 	if c != nil {
 		c.Username = username
 		c.Password = password
@@ -33,7 +37,13 @@ func (c *LimooClient) New(limooBaseURL, username, password string) error {
 			BaseURL:    limooBaseURL,
 		}
 	}
-	_, err := c.login()
+	c.httpClient.Transport = &http.Transport{
+		TLSClientConfig: &tls.Config{
+			InsecureSkipVerify: insecureSkipVerify,
+		},
+	}
+	token, err := c.login()
+	c.lastToken = token
 	return err
 }
 
@@ -62,4 +72,23 @@ func (c *LimooClient) login() (*string, error) {
 	}
 	token := res.Header.Get("Token")
 	return &token, nil
+}
+
+// TODO: return a readable response and also login if necessary
+func (c *LimooClient) SendMessage(opts types.SendMessageOptions) error {
+	body, err := json.Marshal(opts)
+	if err != nil {
+		return err
+	}
+	var resError error
+	reqUri := fmt.Sprintf("/Limonad/api/v1/workspace/items/%v/conversation/items/%v/message/items", opts.WorkspaceID, opts.ConversationID)
+	res, err := c.httpClient.Post(c.BaseURL+reqUri, "application/json", bytes.NewReader(body))
+	if res.StatusCode == http.StatusUnauthorized {
+		resError = errors.New("bad username or password, check your credentials")
+		return resError
+	} else if res.StatusCode != http.StatusOK {
+		resError = errors.New("unknown status code from server")
+		return resError
+	}
+	return nil
 }

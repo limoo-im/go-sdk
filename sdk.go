@@ -13,6 +13,7 @@ import (
 	"github.com/limoo-im/go-sdk/types"
 )
 
+// Main Client you need to create one as a pointer
 type LimooClient struct {
 	Username   string
 	Password   string
@@ -47,6 +48,8 @@ func (c *LimooClient) New(limooBaseURL, username, password string, insecureSkipV
 	return err
 }
 
+// login to limoo and return the new token
+// TODO: use refresh token
 func (c *LimooClient) login() (*string, error) {
 	body := fmt.Sprintf("j_username=%v&j_password=%v", c.Username, c.Password)
 	res, err := c.httpClient.Post(c.BaseURL+"/Limonad/j_spring_security_check", "application/x-www-form-urlencoded", strings.NewReader(body))
@@ -74,6 +77,7 @@ func (c *LimooClient) login() (*string, error) {
 	return &token, nil
 }
 
+// send a message to a conversation
 // TODO: return a readable response and also login if necessary
 func (c *LimooClient) SendMessage(opts types.SendMessageOptions) error {
 	body, err := json.Marshal(opts)

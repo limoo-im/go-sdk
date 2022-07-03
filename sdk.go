@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/limoo-im/go-sdk/types"
+	log "github.com/sirupsen/logrus"
 )
 
 // Main Client you need to create one as a pointer
@@ -20,6 +21,13 @@ type LimooClient struct {
 	BaseURL    string
 	httpClient *http.Client
 	lastToken  *string
+}
+
+// print debug messages or not? (will print sensitive information)
+func SetDebug(d bool) {
+	if d {
+		log.SetLevel(log.DebugLevel)
+	}
 }
 
 // login to limoo and return the client
@@ -74,6 +82,8 @@ func (c *LimooClient) login() (*string, error) {
 		return nil, err
 	}
 	token := res.Header.Get("Token")
+	// TODO: Log response body
+	log.WithField("event", "login").Debugf("Headers: %v", res.Header)
 	return &token, nil
 }
 
@@ -94,5 +104,7 @@ func (c *LimooClient) SendMessage(opts types.SendMessageOptions) error {
 		resError = errors.New("unknown status code from server")
 		return resError
 	}
+	// TODO: Log response body
+	log.WithField("event", "send message").Debugf("Headers: %v", res.Header)
 	return nil
 }

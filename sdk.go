@@ -24,6 +24,8 @@ type LimooClient struct {
 func SetDebug(d bool) {
 	if d {
 		log.SetLevel(log.DebugLevel)
+	} else {
+		log.SetLevel(log.InfoLevel)
 	}
 }
 

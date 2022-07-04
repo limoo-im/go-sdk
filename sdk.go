@@ -52,17 +52,19 @@ func (c *LimooClient) New(limooBaseURL, username, password string, insecureSkipV
 
 // send a message to a conversation
 // TODO: return a readable response
-func (c *LimooClient) SendMessage(opts types.SendMessageOptions) error {
+func (c *LimooClient) SendMessage(opts types.SendMessageOptions) (*types.SendMessageResponse, error) {
 	body, err := json.Marshal(opts)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	reqUri := fmt.Sprintf("/Limonad/api/v1/workspace/items/%v/conversation/items/%v/message/items", opts.WorkspaceID, opts.ConversationID)
 	res, err := c.do(reqUri, http.MethodPost, "application/json", bytes.NewReader(body))
 	if err != nil {
-		return err
+		return nil, err
 	}
+	var response types.SendMessageResponse
+	json.NewDecoder(res.Body).Decode(&response)
 	// TODO: Log response body
 	log.WithField("event", "send message").Debugf("Headers: %v", res.Header)
-	return nil
+	return &response, nil
 }

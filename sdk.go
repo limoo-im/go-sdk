@@ -28,7 +28,6 @@ func SetDebug(d bool) {
 }
 
 // login to limoo and return the client
-// TODO: use refresh token
 func (c *LimooClient) New(limooBaseURL, username, password string, insecureSkipVerify bool) error {
 	if c != nil {
 		c.Username = username

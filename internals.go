@@ -55,9 +55,11 @@ func (c *LimooClient) do(uri string, method, contentType string, body io.Reader)
 		Method: method,
 		URL:    url,
 		Body:   io.NopCloser(body),
+		Header: http.Header{
+			"Content-Type":  []string{contentType},
+			"Authorization": []string{fmt.Sprintf("Bearer %s", *c.lastToken)},
+		},
 	}
-	request.Header.Set("Authorization", fmt.Sprintf("Bearer %s", *c.lastToken))
-	request.Header.Set("Content-Type", contentType)
 	response, err := c.httpClient.Do(request)
 	if response.StatusCode == http.StatusUnauthorized {
 		err = c.login()

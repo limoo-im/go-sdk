@@ -13,24 +13,24 @@ With following sample code you can use this SDK and send a message to Limoo
 package main
 
 import (
-	"github.com/limoo-im/go-sdk"
-	"github.com/limoo-im/go-sdk/types"
+    "github.com/limoo-im/go-sdk"
+    "github.com/limoo-im/go-sdk/types"
 )
 
 func main() {
-	client := &sdk.LimooClient{}
-	err := client.New("https://web.limoo.im", "<username>", "<password>", false)
-	if err != nil {
-		panic(err)
-	}
-	sdk.SetDebug(true)
-	err = client.SendMessage(types.SendMessageOptions{
-		Text:           "Hello World",
-		WorkspaceID:    "<ID of the workspace>",
-		ConversationID: "<ID of the conversation>",
-	})
-	if err != nil {
-		panic(err)
-	}
+    client := &sdk.LimooClient{}
+    err := client.New("https://web.limoo.im", "<username>", "<password>", false)
+    if err != nil {
+        panic(err)
+    }
+    sdk.SetDebug(true)
+    err = client.SendMessage(types.SendMessageOptions{
+        Text:           "Hello World",
+        WorkspaceID:    "<ID of the workspace>",
+        ConversationID: "<ID of the conversation>",
+    })
+    if err != nil {
+        panic(err)
+    }
 }
 ```

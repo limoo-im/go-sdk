@@ -3,11 +3,11 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/limoo-im/go-sdk)](https://goreportcard.com/report/github.com/limoo-im/go-sdk)
 [![Go Reference](https://pkg.go.dev/badge/github.com/limoo-im/go-sdk.svg)](https://pkg.go.dev/github.com/limoo-im/go-sdk)
 
-An SDK for Limoo Written in Go
+Limoo GoLang SDK
 
 ## Example
 
-With following sample code you can use this SDK and send a message to Limoo
+With following sample code you can use this SDK and send a message to Limoo:
 
 ```go
 package main
@@ -34,3 +34,6 @@ func main() {
     }
 }
 ```
+
+## License
+This SDK licensed under [Apache-2 license](LICENSE).

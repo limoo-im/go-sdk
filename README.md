@@ -18,7 +18,7 @@ import (
 )
 
 func main() {
-    create empty client and inialize it
+    // create empty client and inialize it
     client := &sdk.LimooClient{}
     err := client.New("https://web.limoo.im", "<username>", "<password>", false)
     if err != nil {

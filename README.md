@@ -18,12 +18,17 @@ import (
 )
 
 func main() {
+    create empty client and inialize it
     client := &sdk.LimooClient{}
     err := client.New("https://web.limoo.im", "<username>", "<password>", false)
     if err != nil {
         panic(err)
     }
+    
+    // print debug log (will print sensitive data)
     sdk.SetDebug(true)
+    
+    // simply send a message
     err = client.SendMessage(types.SendMessageOptions{
         Text:           "Hello World",
         WorkspaceID:    "<ID of the workspace>",

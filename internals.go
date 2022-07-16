@@ -42,6 +42,7 @@ func (c *LimooClient) login() error {
 	c.lastToken = &token
 	// TODO: Log response body
 	log.WithField("event", "login").Debugf("Headers: %v", res.Header)
+	log.WithField("event", "login").Debugf("Login Data: %v", loginResp)
 	return nil
 }
 
@@ -60,7 +61,11 @@ func (c *LimooClient) do(uri string, method, contentType string, body io.Reader)
 			"Authorization": []string{fmt.Sprintf("Bearer %s", *c.lastToken)},
 		},
 	}
+	log.WithField("event", "request to server").Debugf("request info: %+v", *request)
 	response, err := c.httpClient.Do(request)
+	if err != nil {
+		return nil, err
+	}
 	if response.StatusCode == http.StatusUnauthorized {
 		err = c.login()
 		if err != nil {
@@ -73,5 +78,6 @@ func (c *LimooClient) do(uri string, method, contentType string, body io.Reader)
 	} else if response.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("unknown status %v code from server", response.StatusCode)
 	}
+	log.WithField("event", "response from server").Debugf("Headers: %v", response.Header)
 	return response, nil
 }

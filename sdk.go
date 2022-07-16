@@ -53,7 +53,6 @@ func (c *LimooClient) New(limooBaseURL, username, password string, insecureSkipV
 }
 
 // send a message to a conversation
-// TODO: return a readable response
 func (c *LimooClient) SendMessage(opts types.SendMessageOptions) (*types.SendMessageResponse, error) {
 	body, err := json.Marshal(opts)
 	if err != nil {
@@ -67,6 +66,5 @@ func (c *LimooClient) SendMessage(opts types.SendMessageOptions) (*types.SendMes
 	var response types.SendMessageResponse
 	json.NewDecoder(res.Body).Decode(&response)
 	// TODO: Log response body
-	log.WithField("event", "send message").Debugf("Headers: %v", res.Header)
 	return &response, nil
 }
